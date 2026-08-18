@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">MakerCALK - Calculadora de Costos para Makers</title>
+    <meta name="description" data-i18n="page.desc" content="Calculadora de costos para emprendedores makers. Presupuestos profesionales para impresión 3D, corte láser, CNC y fabricación digital.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="icon" href="icons/makerCALK.svg" type="image/svg+xml">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--c-orange:#FF9800;--c-amber:#FFB300;--c-graphite:#1E1E1E;--c-graphite-light:#2C2C2C;--c-black:#121212;--c-text:#E0E0E0;--c-text-secondary:#B0B0B0;--c-outline:#424242;--c-cyan:#00E5FF;--c-magenta:#FF00FF}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:var(--c-black);color:var(--c-text);line-height:1.6}
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(18,18,18,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(66,66,66,.5);padding:0 24px;height:64px;display:flex;align-items:center;gap:24px}
+        .navbar .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:1.25rem;color:var(--c-text)}
+        .navbar .logo img{height:32px;width:32px;border-radius:6px}
+        .navbar .logo span{color:var(--c-orange)}
+        .nav-links{display:flex;align-items:center;gap:4px;list-style:none;margin-left:auto}
+        .nav-links a{color:var(--c-text-secondary);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:.88rem;font-weight:500;transition:all .2s}
+        .nav-links a:hover{color:var(--c-orange);background:rgba(255,152,0,.08)}
+        .lang-toggle{display:flex;align-items:center;gap:2px;margin-left:8px;background:var(--c-graphite);border:1px solid var(--c-outline);border-radius:8px;overflow:hidden;flex-shrink:0}
+        .lang-toggle button{background:transparent;border:none;color:var(--c-text-secondary);padding:5px 8px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+        .lang-toggle button.active{background:var(--c-orange);color:#000}
+        .lang-toggle button:not(.active):hover{color:var(--c-text)}
+        .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,152,0,.12);color:var(--c-orange);padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:600;border:1px solid rgba(255,152,0,.2)}
+        .hero{padding:140px 24px 80px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:80px;min-height:100vh}
+        .hero-content{flex:1;min-width:0}
+        .hero-content h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:900;line-height:1.1;letter-spacing:-.025em;margin:20px 0}
+        .hero-content h1 span{color:var(--c-orange)}
+        .hero-content p{font-size:1.05rem;color:var(--c-text-secondary);max-width:520px}
+        .hero-visual{flex-shrink:0;width:340px;display:flex;justify-content:center;align-items:center}
+        .phone-frame-link{text-decoration:none;color:inherit}
+        .phone-frame-link .phone-frame{cursor:pointer;transition:border-color .3s}
+        .phone-frame-link:hover .phone-frame{border-color:var(--c-orange)}
+        .phone-frame{width:280px;height:570px;background:var(--c-black);border:3px solid var(--c-outline);border-radius:40px;padding:10px;position:relative;box-shadow:0 0 0 1px rgba(255,152,0,.08),0 20px 60px rgba(0,0,0,.5),0 0 80px rgba(255,152,0,.06)}
+        .phone-frame .notch{width:100px;height:22px;background:var(--c-black);border-radius:0 0 16px 16px;position:absolute;top:-1px;left:50%;transform:translateX(-50%);border:1px solid var(--c-outline);border-top:none;z-index:2}
+        .phone-frame .notch::after{content:'';display:block;width:8px;height:8px;border-radius:50%;border:1.5px solid #444;margin:5px auto 0}
+        .phone-screen{width:100%;height:100%;border-radius:32px;overflow:hidden;background:var(--c-black);border:1px solid var(--c-outline);display:flex;flex-direction:column}
+        .phone-header{background:var(--c-black);padding:10px 12px 6px;border-bottom:1px solid var(--c-outline);display:flex;align-items:center;justify-content:space-between}
+        .phone-header .title{font-size:.6rem;font-weight:700;color:var(--c-text);letter-spacing:.8px;text-transform:uppercase}
+        .phone-tabs{display:flex;gap:3px;padding:6px 8px 0;background:var(--c-black);border-top:1px solid var(--c-outline)}
+        .phone-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.42rem;padding:4px 2px 3px;border-radius:6px;color:var(--c-text-secondary);font-weight:600;background:var(--c-graphite);border:1px solid var(--c-outline);line-height:1.2}
+        .phone-tab.active{background:var(--c-orange);color:#000;border-color:var(--c-orange);box-shadow:0 0 6px rgba(255,152,0,.4)}
+        .phone-body{padding:6px 8px;flex:1;display:flex;flex-direction:column;gap:5px;background:var(--c-graphite);overflow:hidden}
+        .phone-row{display:flex;gap:6px}
+        .phone-row .field{flex:1;background:var(--c-graphite-light);border-radius:6px;padding:5px 7px}
+        .phone-row .field .lbl{font-size:.42rem;color:var(--c-text-secondary);margin-bottom:2px;font-weight:500}
+        .phone-row .field .val{font-size:.48rem;color:var(--c-text);font-weight:500;opacity:.7}
+        .phone-accordion{border:1px solid var(--c-outline);border-radius:7px;overflow:hidden}
+        .phone-acc-header{background:var(--c-graphite-light);padding:6px 8px;display:flex;align-items:center;gap:5px;font-size:.48rem;font-weight:600;color:var(--c-text)}
+        .phone-acc-body{padding:6px 8px;display:flex;flex-direction:column;gap:5px;background:var(--c-graphite-light)}
+        .phone-acc-body .field{background:transparent;padding:0}
+        .phone-acc-body .field .lbl{font-size:.4rem;color:var(--c-text-secondary);margin-bottom:1px}
+        .phone-acc-body .field .val{font-size:.45rem;color:var(--c-text);opacity:.6}
+        .phone-costs{background:var(--c-black);border-radius:7px;border:1px solid var(--c-outline);padding:6px 8px}
+        .phone-cost-row{display:flex;justify-content:space-between;font-size:.4rem;color:var(--c-text-secondary);padding:2px 0;font-family:monospace}
+        .phone-cost-divider{height:1px;background:linear-gradient(to right,transparent,var(--c-outline),transparent);margin:3px 0}
+        .phone-margin{display:flex;justify-content:space-between;align-items:center;font-size:.45rem;color:var(--c-text-secondary)}
+        .phone-pill{background:var(--c-graphite-light);border:1px solid var(--c-outline);border-radius:14px;padding:1px 8px;font-size:.45rem;font-weight:700;color:var(--c-orange)}
+        .phone-total{background:#332200;border:1px solid rgba(255,152,0,.3);border-radius:7px;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-size:.52rem;font-weight:700;color:#FFE082}
+        .phone-actions{display:flex;gap:5px}
+        .phone-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:5px;border-radius:7px;font-size:.4rem;font-weight:600;border:1px solid var(--c-outline)}
+        .phone-save{background:var(--c-orange);color:#000;text-align:center;padding:6px;border-radius:12px;font-size:.5rem;font-weight:700;letter-spacing:.3px}
+        .phone-home{display:flex;justify-content:center;padding:5px 0 3px;background:var(--c-black)}
+        .phone-home .bar{width:100px;height:4px;background:var(--c-outline);border-radius:4px}
+        section{padding:100px 24px}
+        .section-inner{max-width:1100px;margin:0 auto}
+        .section-title{font-size:2rem;font-weight:700;margin-bottom:12px}
+        .section-subtitle{color:var(--c-text-secondary);font-size:1.05rem;max-width:800px;margin-bottom:48px}
+        .section-title.centered,.section-subtitle.centered{text-align:center;margin-left:auto;margin-right:auto}
+        .alt-bg{background:var(--c-graphite);border-top:1px solid var(--c-outline);border-bottom:1px solid var(--c-outline)}
+        .feature-detail{display:flex;align-items:flex-start;gap:40px;margin-bottom:60px}
+        .feature-detail:last-child{margin-bottom:0}
+        
+        .feature-detail .icon-box{flex-shrink:0;width:56px;height:56px;border-radius:14px;background:rgba(255,152,0,.1);display:flex;align-items:center;justify-content:center;color:var(--c-orange);font-size:28px}
+        .feature-detail .text{flex:1}
+        .feature-detail .text h3{font-size:1.2rem;font-weight:700;margin-bottom:6px}
+        .feature-detail .text p{color:var(--c-text-secondary);font-size:.92rem;margin-bottom:10px;max-width:600px}
+        .feature-detail .text ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+        .feature-detail .text ul li{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--c-text)}
+        .feature-detail .text ul li span.material-symbols-rounded{font-size:16px;color:var(--c-orange)}
+        .feature-tag{display:inline-block;background:rgba(255,152,0,.1);color:var(--c-amber);font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+        .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+        .card{background:var(--c-graphite);border:1px solid var(--c-outline);border-radius:14px;padding:24px;transition:border-color .3s,transform .3s}
+        .card:hover{border-color:var(--c-orange);transform:translateY(-3px)}
+        .card .icon{width:44px;height:44px;border-radius:10px;background:rgba(255,152,0,.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--c-orange);font-size:22px}
+        .card h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+        .card p{color:var(--c-text-secondary);font-size:.88rem;line-height:1.5}
+        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:800px;margin:0 auto}
+        .stat-item{text-align:center}
+        .stat-item .stat-number{font-size:2.2rem;font-weight:900;color:var(--c-orange)}
+        .stat-item .stat-label{color:var(--c-text-secondary);font-size:.88rem;margin-top:4px}
+        .divider{width:50px;height:3px;background:var(--c-orange);border-radius:2px;margin:50px auto}
+        footer{border-top:1px solid var(--c-outline);padding:36px 24px;text-align:center;color:var(--c-text-secondary);font-size:.82rem}
+        footer .version{display:block;margin-top:6px;font-size:.72rem;color:#666}
+
+        @media(max-width:900px){
+            .hero{gap:40px}
+            .hero-visual{width:260px}
+            .phone-frame{width:230px;height:470px;border-radius:32px;padding:8px}
+            .phone-frame .notch{width:80px;height:18px;border-radius:0 0 12px 12px}
+            .phone-screen{border-radius:26px}
+            .phone-header{padding:8px 10px 5px}
+            .phone-header .title{font-size:.52rem}
+            .phone-body{padding:5px 7px;gap:4px}
+            .phone-tabs{padding:5px 7px 0;gap:2px}
+            .phone-tab{font-size:.36rem;padding:3px 1px 2px}
+            .phone-tab span{font-size:12px!important}
+            .phone-acc-header{font-size:.42rem;padding:5px 6px}
+            .phone-acc-header span{font-size:12px!important}
+            .phone-acc-body{padding:5px 6px;gap:4px}
+            .phone-acc-body .field .lbl{font-size:.36rem}
+            .phone-acc-body .field .val{font-size:.4rem}
+            .phone-costs{padding:5px 7px}
+            .phone-cost-row{font-size:.36rem}
+            .phone-margin{font-size:.4rem}
+            .phone-pill{font-size:.4rem;padding:1px 7px}
+            .phone-total{font-size:.46rem;padding:5px 7px}
+            .phone-actions{gap:4px}
+            .phone-btn{font-size:.36rem;padding:4px}
+            .phone-btn span{font-size:10px!important}
+            .phone-save{font-size:.44rem;padding:5px;border-radius:10px}
+            .phone-home .bar{width:80px;height:3px}
+            .stat-item .stat-number{font-size:1.8rem}
+        }
+        @media(max-width:768px){
+            .navbar{padding:0 16px}
+            .nav-links{display:none}
+            .hero{flex-direction:column-reverse;padding:100px 16px 60px;gap:50px;min-height:auto;text-align:center}
+            .hero-content p{margin:0 auto}
+            .hero-visual{width:220px}
+            .phone-frame{width:200px;height:410px;border-radius:28px;padding:6px}
+            .phone-frame .notch{width:70px;height:16px}
+            .phone-screen{border-radius:22px}
+            .phone-header .title{font-size:.46rem}
+            .phone-tab{font-size:.34rem;padding:3px 1px 2px}
+            .phone-tab span{font-size:10px!important}
+            .phone-acc-header{font-size:.38rem;padding:4px 5px}
+            .phone-acc-header span{font-size:10px!important}
+            .phone-acc-body{padding:4px 5px;gap:3px}
+            .phone-acc-body .field .lbl{font-size:.34rem}
+            .phone-acc-body .field .val{font-size:.38rem}
+            .phone-costs{padding:4px 6px}
+            .phone-cost-row{font-size:.34rem}
+            .phone-margin{font-size:.38rem}
+            .phone-pill{font-size:.38rem;padding:0 6px}
+            .phone-total{font-size:.42rem;padding:4px 6px}
+            .phone-actions{gap:3px}
+            .phone-btn{font-size:.34rem;padding:3px}
+            .phone-btn span{font-size:8px!important}
+            .phone-save{font-size:.4rem;padding:4px;border-radius:8px}
+            section{padding:60px 16px}
+            .section-title{font-size:1.5rem}
+            .feature-detail{flex-direction:column!important;gap:16px;margin-bottom:36px}
+            .feature-detail .icon-box{width:48px;height:48px;font-size:24px}
+            .cards-grid{grid-template-columns:1fr}
+            .stats-grid{grid-template-columns:1fr 1fr}
+            .stat-item .stat-number{font-size:1.6rem}
+        }
+        @media(max-width:480px){
+            .hero-content h1{font-size:1.6rem}
+            .hero-visual{width:180px}
+            .phone-frame{width:160px;height:330px;border-radius:22px;padding:4px}
+            .phone-frame .notch{width:60px;height:14px;border-radius:0 0 10px 10px}
+            .phone-screen{border-radius:18px}
+            .phone-tabs{display:none}
+            .phone-acc-body .phone-row{flex-direction:column;gap:2px}
+            .phone-actions{flex-direction:column;gap:2px}
+            .phone-save{font-size:.38rem;padding:3px}
+            .stats-grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <img src="icons/makerCALK.svg" alt="MakerCALK" width="32" height="32">
+            Maker<span>CALK</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#calculadora" data-i18n="nav.calculadora">Calculadora</a></li>
+            <li><a href="#maquinas" data-i18n="nav.maquinas">Máquinas</a></li>
+            <li><a href="#materiales" data-i18n="nav.materiales">Materiales</a></li>
+            <li><a href="#costos" data-i18n="nav.costos">Costos</a></li>
+        </ul>
+        <div class="lang-toggle">
+            <button onclick="setLang('es')" class="active">ES</button>
+            <button onclick="setLang('en')">EN</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge"><span class="material-symbols-rounded" style="font-size:15px">auto_awesome</span><span data-i18n="hero.badge">Gratis</span></div>
+            <h1><span data-i18n="hero.title-pre">La calculadora de costos que todo</span> <span>maker</span> <span data-i18n="hero.title-post">necesita</span></h1>
+            <p data-i18n="hero.desc">Presupuestos profesionales para impresión 3D, corte láser, CNC y fabricación digital. Materiales, máquinas, mano de obra y márgenes en una sola herramienta.</p>
+        </div>
+        <div class="hero-visual">
+            <a href="https://www.vacodir.com.uy/calculadora" target="_blank" class="phone-frame-link">
+            <div class="phone-frame">
+                <div class="notch"></div>
+                <div class="phone-screen">
+                    <div class="phone-header">
+                        <span class="title">MakerCalk <span style="font-size:.5rem;opacity:.6">v7.0</span></span>
+                        <span class="material-symbols-rounded" style="font-size:16px;color:var(--c-text-secondary)">history</span>
+                    </div>
+                    <div class="phone-tabs">
+                        <div class="phone-tab active"><span class="material-symbols-rounded" style="font-size:16px">home</span><span data-i18n="phone.home">HOME</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">person</span><span data-i18n="phone.cliente">Cliente</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">print_add</span><span data-i18n="phone.maq">Maq.</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">category</span><span data-i18n="phone.mat">Mat.</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">brush</span><span data-i18n="phone.post">Post.</span></div>
+                    </div>
+                    <div class="phone-body">
+                        <div class="phone-accordion" style="border-color:var(--c-orange)">
+                            <div class="phone-acc-header" style="background:var(--c-orange);color:#000">
+                                <span class="material-symbols-rounded" style="font-size:14px;color:#000">description</span>
+                                <span data-i18n="phone.detalles">Detalles del Trabajo</span>
+                                <span class="material-symbols-rounded" style="font-size:16px;margin-left:auto;color:#000">expand_less</span>
+                            </div>
+                            <div class="phone-acc-body">
+                                <div class="field"><div class="lbl" data-i18n="phone.titulo-lbl">Título del Trabajo</div><div class="val" style="color:var(--c-text-secondary)" data-i18n="phone.titulo-val">Ej. Impresion 3D Prototipo</div></div>
+                                <div class="field"><div class="lbl" data-i18n="phone.tipo-lbl">Tipo de Trabajo</div><div class="val" style="color:var(--c-text-secondary)" data-i18n="phone.tipo-val">Impresion 3D</div></div>
+                                <div class="phone-row" style="gap:4px">
+                                    <div class="field" style="flex:1"><div class="lbl" data-i18n="phone.fecha-lbl">Fecha</div><div class="val" style="font-size:.48rem">15/05/2026</div></div>
+                                    <div class="field" style="flex:1"><div class="lbl" data-i18n="phone.estado-lbl">Estado</div><div class="val" style="font-size:.48rem" data-i18n="phone.estado-val">Pendiente</div></div>
+                                </div>
+                                <div class="field"><div class="lbl" data-i18n="phone.cantidad-lbl">Cantidad de Unidades</div><div class="val">1</div></div>
+                            </div>
+                        </div>
+                        <div class="phone-accordion">
+                            <div class="phone-acc-header">
+                                <span class="material-symbols-rounded" style="font-size:14px">payments</span>
+                                <span data-i18n="phone.resumen">Resumen y Acciones</span>
+                                <span class="material-symbols-rounded" style="font-size:16px;margin-left:auto">expand_more</span>
+                            </div>
+                        </div>
+                        <div class="phone-costs">
+                            <div class="phone-cost-row"><span data-i18n="phone.maq-en">Maquinas / Energia</span><span>$0.00</span></div>
+                            <div class="phone-cost-row"><span data-i18n="phone.empresa">Empresa / Gastos</span><span>$0.00</span></div>
+                            <div class="phone-cost-row"><span data-i18n="phone.materiales">Materiales</span><span>$0.00</span></div>
+                            <div class="phone-cost-row"><span data-i18n="phone.labor">Mano de Obra</span><span>$0.00</span></div>
+                            <div class="phone-cost-row"><span data-i18n="phone.post-proc">Post-Proceso</span><span>$0.00</span></div>
+                            <div class="phone-cost-divider"></div>
+                            <div class="phone-cost-row" style="color:var(--c-orange);font-weight:700"><span data-i18n="phone.costo-real">Costo Real</span><span>$0.00</span></div>
+                        </div>
+                        <div class="phone-margin">
+                            <span data-i18n="phone.margen">Margen de Ganancia</span>
+                            <span class="phone-pill">20%</span>
+                        </div>
+                        <div class="phone-total">
+                            <span data-i18n="phone.total">TOTAL PRESUPUESTO</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div class="phone-actions">
+                            <div class="phone-btn" style="background:var(--c-graphite-light);color:var(--c-text-secondary)"><span class="material-symbols-rounded" style="font-size:12px">pie_chart</span><span data-i18n="phone.grafico">Grafico</span></div>
+                            <div class="phone-btn" style="background:#757575;color:#fff"><span class="material-symbols-rounded" style="font-size:12px">print</span>PDF</div>
+                        </div>
+                        <div class="phone-save" data-i18n="phone.guardar">Guardar</div>
+                        <div class="phone-home"><div class="bar"></div></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <section class="alt-bg">
+        <div class="section-inner">
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-number">10+</div><div class="stat-label" data-i18n="stats.monedas">Monedas</div></div>
+                <div class="stat-item"><div class="stat-number">4</div><div class="stat-label" data-i18n="stats.tecnologias">Tecnologías</div></div>
+                <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label" data-i18n="stats.offline">Offline</div></div>
+                <div class="stat-item"><div class="stat-number" data-i18n="stats.gratis-num">Gratis</div><div class="stat-label" data-i18n="stats.sin-registro">Sin registro</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tutorial" style="padding:60px 24px">
+        <div class="section-inner">
+            <h2 class="section-title centered" data-i18n="tutorial.title">Video tutorial</h2>
+            <p class="section-subtitle centered" style="margin-bottom:28px" data-i18n="tutorial.desc">Mirá cómo usar MakerCALK de principio a fin.</p>
+            <div style="max-width:800px;margin:0 auto;border-radius:16px;overflow:hidden;border:1px solid var(--c-outline);aspect-ratio:16/9">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/0Qs4ufMWvao" title="Tutorial MakerCALK" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="display:block"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculadora">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="calc.title">Calculadora inteligente</h2>
+            <p class="section-subtitle" data-i18n="calc.subtitle">Un motor de costos que desglosa cada componente del presupuesto y lo adapta a tu moneda local.</p>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">receipt_long</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="calc.tag-nucleo">Núcleo</span>
+                    <h3 data-i18n="calc.desglose-title">Desglose completo de costos</h3>
+                    <p data-i18n="calc.desglose-desc">Suma automáticamente materiales, máquinas, mano de obra, post-procesado y overhead. Cada rubro se muestra por separado.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.desglose-li1">Subtotal por categoría con moneda individual</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.desglose-li2">Margen de ganancia porcentual ajustable</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.desglose-li3">Impuesto localizado según el país</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.desglose-li4">Multiplicador por cantidad de unidades</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.desglose-li5">Gráfico de torta donut con distribución de costos</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">language</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="calc.tag-geo">Geo-inteligencia</span>
+                    <h3 data-i18n="calc.geo-title">Moneda y región automática</h3>
+                    <p data-i18n="calc.geo-desc">Configura la moneda y etiquetas fiscales de tu país automáticamente.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.geo-li1">UYU, ARS, CLP, BRL, COP, PYG, USD, EUR</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.geo-li2">Conversión USD con tasa configurable</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="calc.geo-li3">Etiquetas localizadas: BPS/AFIP, IVA, DGI/SII</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">palette</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="calc.tag-temas">Temas</span>
+                    <h3 data-i18n="calc.temas-title">Dos temas visuales</h3>
+                    <p data-i18n="calc.temas-desc">Modo oscuro Graphite con acentos naranjas, o modo claro Cyan con paleta CMYK. Los gráficos se adaptan al tema activo.</p>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <h3 style="text-align:center;font-size:1.2rem;margin-bottom:28px" data-i18n="calc.componentes">Componentes del presupuesto</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">manufacturing</span></div>
+                    <h3 data-i18n="card.maquinas-title">Máquinas</h3>
+                    <p data-i18n="card.maquinas-desc">Costo energético, desgaste por hora y overhead empresarial por máquina.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">inventory_2</span></div>
+                    <h3 data-i18n="card.materiales-title">Materiales FDM / SLA</h3>
+                    <p data-i18n="card.materiales-desc">Base de datos con precio por kilo, consumo en gramos y moneda individual.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">handyman</span></div>
+                    <h3 data-i18n="card.post-title">Post-procesado</h3>
+                    <p data-i18n="card.post-desc">Lijado, pintura, ensamble — servicios extra con precio por hora.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">person</span></div>
+                    <h3 data-i18n="card.labor-title">Mano de obra</h3>
+                    <p data-i18n="card.labor-desc">Horas de diseño con tarifa. Opción de distribuir entre unidades.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">content_cut</span></div>
+                    <h3 data-i18n="card.laser-title">Grabado láser</h3>
+                    <p data-i18n="card.laser-desc">Calculadora de insumos: precio unitario × cantidad.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">grid_view</span></div>
+                    <h3 data-i18n="card.planchas-title">Planchas (láser/CNC)</h3>
+                    <p data-i18n="card.planchas-desc">Aprovechamiento de planchas con factor de utilización.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="maquinas" class="alt-bg">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="maq.title">Gestión de máquinas</h2>
+            <p class="section-subtitle" data-i18n="maq.subtitle">Registrá tus máquinas con parámetros técnicos y la calculadora hace el resto.</p>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">precision_manufacturing</span></div>
+                <div class="text">
+                    <h3 data-i18n="maq.catalogo-title">Catálogo completo</h3>
+                    <p data-i18n="maq.catalogo-desc">Cada máquina guarda nombre, categoría (FDM, SLA, LÁSER, CNC), potencia, desgaste y moneda.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.catalogo-li1">Cálculo automático de desgaste desde precio de compra + vida útil</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.catalogo-li2">Costo energético: (watts / 1000) × precio kWh × horas</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.catalogo-li3">Overhead distribuido por hora máquina</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">auto_awesome</span></div>
+                <div class="text">
+                    <h3 data-i18n="maq.desgaste-title">Desgaste automático</h3>
+                    <p data-i18n="maq.desgaste-desc">Ingresá precio de compra y vida útil. MakerCALK calcula el desgaste por hora y convierte de USD si es necesario.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.desgaste-li1">Precio en USD o moneda local</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.desgaste-li2">Conversión automática con tasa configurable</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="maq.desgaste-li3">Desgaste = precio / vida útil (horas)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="materiales">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="mat.title">Base de datos de materiales</h2>
+            <p class="section-subtitle" data-i18n="mat.subtitle">Catálogo con precios, consumo en gramos y autocompletado inteligente.</p>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">format_list_bulleted</span></div>
+                    <h3 data-i18n="mat.fdm-title">Materiales FDM</h3>
+                    <p data-i18n="mat.fdm-desc">PLA, ABS, PET-G, TPU, Nylon, PC, ASA y más. Precio por kilo.</p>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color:var(--c-magenta);background:rgba(255,0,255,.1)"><span class="material-symbols-rounded">water_drop</span></div>
+                    <h3 data-i18n="mat.resinas-title">Resinas SLA</h3>
+                    <p data-i18n="mat.resinas-desc">Estándar, técnica, flexible, transparente, castable.</p>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color:var(--c-cyan);background:rgba(0,229,255,.1)"><span class="material-symbols-rounded">save</span></div>
+                    <h3 data-i18n="mat.guardado-title">Guardado inteligente</h3>
+                    <p data-i18n="mat.guardado-desc">Los materiales guardados aparecen como sugerencia en futuros presupuestos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="costos" class="alt-bg">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="cost.title">Costos de taller y overhead</h2>
+            <p class="section-subtitle" data-i18n="cost.subtitle">Distribuí todos tus gastos en el costo por hora máquina.</p>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">account_balance</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="cost.tag-overhead">Overhead</span>
+                    <h3 data-i18n="cost.admin-title">Gastos administrativos</h3>
+                    <p data-i18n="cost.admin-desc">BPS/autónomos, DGI/AFIP/SII, contador, seguros — todo en tu moneda.</p>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">home_work</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="cost.tag-fijos">Fijos</span>
+                    <h3 data-i18n="cost.oper-title">Gastos operativos</h3>
+                    <p data-i18n="cost.oper-desc">Alquiler, luz, agua, internet, transporte, marketing con moneda propia cada uno.</p>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">trending_up</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="cost.tag-margen">Margen</span>
+                    <h3 data-i18n="cost.ganancia-title">Ganancia e impuestos</h3>
+                    <p data-i18n="cost.ganancia-desc">Margen porcentual global + cálculo de impuestos incluido. Precio final automático.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-inner">
+            <h2 class="section-title centered" data-i18n="cloud.title">Respaldo en la nube (proximamente)</h2>
+            <p class="section-subtitle centered" data-i18n="cloud.subtitle">Tus datos sincronizados con Supabase y Google Drive.</p>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon" style="color:#3ECF8E;background:rgba(62,207,142,.1)"><span class="material-symbols-rounded">cloud</span></div>
+                    <h3 data-i18n="cloud.supabase-title">Supabase</h3>
+                    <p data-i18n="cloud.supabase-desc">Auth por email + backup automático de trabajos, clientes y configuración.</p>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color:#4285F4;background:rgba(66,133,244,.1)"><span class="material-symbols-rounded">cloud_sync</span></div>
+                    <h3 data-i18n="cloud.drive-title">Google Drive</h3>
+                    <p data-i18n="cloud.drive-desc">Subí y descargá respaldos completos desde tu cuenta de Google.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">timer</span></div>
+                    <h3 data-i18n="cloud.auto-title">Auto-guardado</h3>
+                    <p data-i18n="cloud.auto-desc">Sincronización programada cada N minutos con la nube.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p data-i18n="footer.text">Hecho con amor para la comunidad maker</p>
+        <span class="version" data-i18n="footer.version">MakerCALK — Diseñado por KineCAD</span>
+    </footer>
+
+    <script>
+    const i18n = {
+        "page.title": {
+            es: "MakerCALK - Calculadora de Costos para Makers",
+            en: "MakerCALK - Cost Calculator for Makers"
+        },
+        "page.desc": {
+            es: "Calculadora de costos para emprendedores makers. Presupuestos profesionales para impresión 3D, corte láser, CNC y fabricación digital.",
+            en: "Cost calculator for maker entrepreneurs. Professional estimates for 3D printing, laser cutting, CNC and digital fabrication."
+        },
+        "nav.calculadora": { es: "Calculadora", en: "Calculator" },
+        "nav.maquinas": { es: "Máquinas", en: "Machines" },
+        "nav.materiales": { es: "Materiales", en: "Materials" },
+        "nav.costos": { es: "Costos", en: "Costs" },
+        "hero.badge": { es: "Gratis", en: "Free" },
+        "hero.title-pre": { es: "La calculadora de costos que todo", en: "The cost calculator every" },
+        "hero.title-post": { es: "necesita", en: "needs" },
+        "hero.desc": { es: "Presupuestos profesionales para impresión 3D, corte láser, CNC y fabricación digital. Materiales, máquinas, mano de obra y márgenes en una sola herramienta.", en: "Professional estimates for 3D printing, laser cutting, CNC and digital fabrication. Materials, machines, labor and margins in a single tool." },
+        "phone.home": { es: "HOME", en: "HOME" },
+        "phone.cliente": { es: "Cliente", en: "Client" },
+        "phone.maq": { es: "Maq.", en: "Mach." },
+        "phone.mat": { es: "Mat.", en: "Mat." },
+        "phone.post": { es: "Post.", en: "Post." },
+        "phone.detalles": { es: "Detalles del Trabajo", en: "Job Details" },
+        "phone.titulo-lbl": { es: "Título del Trabajo", en: "Job Title" },
+        "phone.titulo-val": { es: "Ej. Impresion 3D Prototipo", en: "e.g. 3D Print Prototype" },
+        "phone.tipo-lbl": { es: "Tipo de Trabajo", en: "Job Type" },
+        "phone.tipo-val": { es: "Impresion 3D", en: "3D Printing" },
+        "phone.fecha-lbl": { es: "Fecha", en: "Date" },
+        "phone.estado-lbl": { es: "Estado", en: "Status" },
+        "phone.estado-val": { es: "Pendiente", en: "Pending" },
+        "phone.cantidad-lbl": { es: "Cantidad de Unidades", en: "Quantity" },
+        "phone.resumen": { es: "Resumen y Acciones", en: "Summary & Actions" },
+        "phone.maq-en": { es: "Maquinas / Energia", en: "Machines / Energy" },
+        "phone.empresa": { es: "Empresa / Gastos", en: "Company / Expenses" },
+        "phone.materiales": { es: "Materiales", en: "Materials" },
+        "phone.labor": { es: "Mano de Obra", en: "Labor" },
+        "phone.post-proc": { es: "Post-Proceso", en: "Post-Process" },
+        "phone.costo-real": { es: "Costo Real", en: "Actual Cost" },
+        "phone.margen": { es: "Margen de Ganancia", en: "Profit Margin" },
+        "phone.total": { es: "TOTAL PRESUPUESTO", en: "TOTAL BUDGET" },
+        "phone.grafico": { es: "Grafico", en: "Chart" },
+        "phone.guardar": { es: "Guardar", en: "Save" },
+        "stats.monedas": { es: "Monedas", en: "Currencies" },
+        "stats.tecnologias": { es: "Tecnologías", en: "Technologies" },
+        "stats.offline": { es: "Offline", en: "Offline" },
+        "stats.gratis-num": { es: "Gratis", en: "Free" },
+        "stats.sin-registro": { es: "Sin registro", en: "No sign-up" },
+        "tutorial.title": { es: "Video tutorial", en: "Video tutorial" },
+        "tutorial.desc": { es: "Mirá cómo usar MakerCALK de principio a fin.", en: "Watch how to use MakerCALK from start to finish." },
+        "calc.title": { es: "Calculadora inteligente", en: "Smart Calculator" },
+        "calc.subtitle": { es: "Un motor de costos que desglosa cada componente del presupuesto y lo adapta a tu moneda local.", en: "A cost engine that breaks down every budget component and adapts to your local currency." },
+        "calc.tag-nucleo": { es: "Núcleo", en: "Core" },
+        "calc.desglose-title": { es: "Desglose completo de costos", en: "Complete cost breakdown" },
+        "calc.desglose-desc": { es: "Suma automáticamente materiales, máquinas, mano de obra, post-procesado y overhead. Cada rubro se muestra por separado.", en: "Automatically adds materials, machines, labor, post-processing and overhead. Each item is shown separately." },
+        "calc.desglose-li1": { es: "Subtotal por categoría con moneda individual", en: "Subtotal by category with individual currency" },
+        "calc.desglose-li2": { es: "Margen de ganancia porcentual ajustable", en: "Adjustable profit margin percentage" },
+        "calc.desglose-li3": { es: "Impuesto localizado según el país", en: "Country-specific localized tax" },
+        "calc.desglose-li4": { es: "Multiplicador por cantidad de unidades", en: "Quantity multiplier" },
+        "calc.desglose-li5": { es: "Gráfico de torta donut con distribución de costos", en: "Donut chart with cost distribution" },
+        "calc.tag-geo": { es: "Geo-inteligencia", en: "Geo-intelligence" },
+        "calc.geo-title": { es: "Moneda y región automática", en: "Automatic currency & region" },
+        "calc.geo-desc": { es: "Configura la moneda y etiquetas fiscales de tu país automáticamente.", en: "Automatically sets your country's currency and tax labels." },
+        "calc.geo-li1": { es: "UYU, ARS, CLP, BRL, COP, PYG, USD, EUR", en: "UYU, ARS, CLP, BRL, COP, PYG, USD, EUR" },
+        "calc.geo-li2": { es: "Conversión USD con tasa configurable", en: "USD conversion with configurable rate" },
+        "calc.geo-li3": { es: "Etiquetas localizadas: BPS/AFIP, IVA, DGI/SII", en: "Localized labels: BPS/AFIP, VAT, DGI/SII" },
+        "calc.tag-temas": { es: "Temas", en: "Themes" },
+        "calc.temas-title": { es: "Dos temas visuales", en: "Two visual themes" },
+        "calc.temas-desc": { es: "Modo oscuro Graphite con acentos naranjas, o modo claro Cyan con paleta CMYK. Los gráficos se adaptan al tema activo.", en: "Graphite dark mode with orange accents, or Cyan light mode with CMYK palette. Charts adapt to the active theme." },
+        "calc.componentes": { es: "Componentes del presupuesto", en: "Budget components" },
+        "card.maquinas-title": { es: "Máquinas", en: "Machines" },
+        "card.maquinas-desc": { es: "Costo energético, desgaste por hora y overhead empresarial por máquina.", en: "Energy cost, hourly wear and business overhead per machine." },
+        "card.materiales-title": { es: "Materiales FDM / SLA", en: "FDM / SLA Materials" },
+        "card.materiales-desc": { es: "Base de datos con precio por kilo, consumo en gramos y moneda individual.", en: "Database with price per kilo, consumption in grams and individual currency." },
+        "card.post-title": { es: "Post-procesado", en: "Post-processing" },
+        "card.post-desc": { es: "Lijado, pintura, ensamble — servicios extra con precio por hora.", en: "Sanding, painting, assembly — extra services with hourly rate." },
+        "card.labor-title": { es: "Mano de obra", en: "Labor" },
+        "card.labor-desc": { es: "Horas de diseño con tarifa. Opción de distribuir entre unidades.", en: "Design hours with rate. Option to distribute across units." },
+        "card.laser-title": { es: "Grabado láser", en: "Laser engraving" },
+        "card.laser-desc": { es: "Calculadora de insumos: precio unitario × cantidad.", en: "Supplies calculator: unit price × quantity." },
+        "card.planchas-title": { es: "Planchas (láser/CNC)", en: "Sheets (laser/CNC)" },
+        "card.planchas-desc": { es: "Aprovechamiento de planchas con factor de utilización.", en: "Sheet utilization with fill factor." },
+        "maq.title": { es: "Gestión de máquinas", en: "Machine management" },
+        "maq.subtitle": { es: "Registrá tus máquinas con parámetros técnicos y la calculadora hace el resto.", en: "Register your machines with technical parameters and the calculator does the rest." },
+        "maq.catalogo-title": { es: "Catálogo completo", en: "Complete catalog" },
+        "maq.catalogo-desc": { es: "Cada máquina guarda nombre, categoría (FDM, SLA, LÁSER, CNC), potencia, desgaste y moneda.", en: "Each machine stores name, category (FDM, SLA, LASER, CNC), power, wear and currency." },
+        "maq.catalogo-li1": { es: "Cálculo automático de desgaste desde precio de compra + vida útil", en: "Automatic wear calculation from purchase price + lifespan" },
+        "maq.catalogo-li2": { es: "Costo energético: (watts / 1000) × precio kWh × horas", en: "Energy cost: (watts / 1000) × kWh price × hours" },
+        "maq.catalogo-li3": { es: "Overhead distribuido por hora máquina", en: "Overhead distributed per machine hour" },
+        "maq.desgaste-title": { es: "Desgaste automático", en: "Automatic wear" },
+        "maq.desgaste-desc": { es: "Ingresá precio de compra y vida útil. MakerCALK calcula el desgaste por hora y convierte de USD si es necesario.", en: "Enter purchase price and lifespan. MakerCALK calculates hourly wear and converts from USD if needed." },
+        "maq.desgaste-li1": { es: "Precio en USD o moneda local", en: "Price in USD or local currency" },
+        "maq.desgaste-li2": { es: "Conversión automática con tasa configurable", en: "Automatic conversion with configurable rate" },
+        "maq.desgaste-li3": { es: "Desgaste = precio / vida útil (horas)", en: "Wear = price / lifespan (hours)" },
+        "mat.title": { es: "Base de datos de materiales", en: "Material database" },
+        "mat.subtitle": { es: "Catálogo con precios, consumo en gramos y autocompletado inteligente.", en: "Catalog with prices, gram consumption and smart autocomplete." },
+        "mat.fdm-title": { es: "Materiales FDM", en: "FDM Materials" },
+        "mat.fdm-desc": { es: "PLA, ABS, PET-G, TPU, Nylon, PC, ASA y más. Precio por kilo.", en: "PLA, ABS, PET-G, TPU, Nylon, PC, ASA and more. Price per kilo." },
+        "mat.resinas-title": { es: "Resinas SLA", en: "SLA Resins" },
+        "mat.resinas-desc": { es: "Estándar, técnica, flexible, transparente, castable.", en: "Standard, technical, flexible, transparent, castable." },
+        "mat.guardado-title": { es: "Guardado inteligente", en: "Smart saving" },
+        "mat.guardado-desc": { es: "Los materiales guardados aparecen como sugerencia en futuros presupuestos.", en: "Saved materials appear as suggestions in future estimates." },
+        "cost.title": { es: "Costos de taller y overhead", en: "Workshop costs & overhead" },
+        "cost.subtitle": { es: "Distribuí todos tus gastos en el costo por hora máquina.", en: "Distribute all your expenses into the cost per machine hour." },
+        "cost.tag-overhead": { es: "Overhead", en: "Overhead" },
+        "cost.admin-title": { es: "Gastos administrativos", en: "Administrative expenses" },
+        "cost.admin-desc": { es: "BPS/autónomos, DGI/AFIP/SII, contador, seguros — todo en tu moneda.", en: "BPS/self-employed, DGI/AFIP/SII, accountant, insurance — all in your currency." },
+        "cost.tag-fijos": { es: "Fijos", en: "Fixed" },
+        "cost.oper-title": { es: "Gastos operativos", en: "Operating expenses" },
+        "cost.oper-desc": { es: "Alquiler, luz, agua, internet, transporte, marketing con moneda propia cada uno.", en: "Rent, electricity, water, internet, transport, marketing each with their own currency." },
+        "cost.tag-margen": { es: "Margen", en: "Margin" },
+        "cost.ganancia-title": { es: "Ganancia e impuestos", en: "Profit & taxes" },
+        "cost.ganancia-desc": { es: "Margen porcentual global + cálculo de impuestos incluido. Precio final automático.", en: "Global profit margin + tax calculation included. Automatic final price." },
+        "cloud.title": { es: "Respaldo en la nube (proximamente)", en: "Cloud backup (coming soon)" },
+        "cloud.subtitle": { es: "Tus datos sincronizados con Supabase y Google Drive.", en: "Your data synced with Supabase and Google Drive." },
+        "cloud.supabase-title": { es: "Supabase", en: "Supabase" },
+        "cloud.supabase-desc": { es: "Auth por email + backup automático de trabajos, clientes y configuración.", en: "Email auth + automatic backup of jobs, clients and settings." },
+        "cloud.drive-title": { es: "Google Drive", en: "Google Drive" },
+        "cloud.drive-desc": { es: "Subí y descargá respaldos completos desde tu cuenta de Google.", en: "Upload and download complete backups from your Google account." },
+        "cloud.auto-title": { es: "Auto-guardado", en: "Auto-save" },
+        "cloud.auto-desc": { es: "Sincronización programada cada N minutos con la nube.", en: "Scheduled sync every N minutes with the cloud." },
+        "footer.text": { es: "Hecho con amor para la comunidad maker", en: "Made with love for the maker community" },
+        "footer.version": { es: "MakerCALK — Diseñado por KineCAD", en: "MakerCALK — Designed by KineCAD" }
+    };
+
+    function setLang(lang) {
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+            const key = el.getAttribute("data-i18n");
+            if (key && i18n[key] && i18n[key][lang]) {
+                el.textContent = i18n[key][lang];
+            }
+        });
+
+        document.querySelector("html").setAttribute("lang", lang);
+        document.querySelectorAll(".lang-toggle button").forEach(btn => {
+            btn.classList.toggle("active", btn.textContent.toLowerCase() === lang);
+        });
+        localStorage.setItem("makerCALK-lang", lang);
+    }
+
+    const savedLang = localStorage.getItem("makerCALK-lang") || "es";
+    setLang(savedLang);
+    </script>
+
+</body>
+</html>
