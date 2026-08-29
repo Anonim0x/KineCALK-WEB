@@ -61,6 +61,17 @@
         .phone-cost-divider{height:1px;background:linear-gradient(to right,transparent,var(--c-outline),transparent);margin:3px 0}
         .phone-margin{display:flex;justify-content:space-between;align-items:center;font-size:.45rem;color:var(--c-text-secondary)}
         .phone-pill{background:var(--c-graphite-light);border:1px solid var(--c-outline);border-radius:14px;padding:1px 8px;font-size:.45rem;font-weight:700;color:var(--c-orange)}
+        .phone-version{font-size:.5rem;font-weight:800;color:var(--c-orange);cursor:pointer;border:1px solid rgba(255,152,0,.4);border-radius:12px;padding:1px 7px;background:rgba(255,152,0,.08)}
+        .phone-presets{display:flex;gap:3px;margin-top:2px;align-items:center}
+        .phone-preset{background:var(--c-graphite-light);border:1px solid var(--c-outline);border-radius:6px;color:var(--c-text-secondary);font-size:.4rem;font-weight:700;padding:1px 5px;line-height:14px;cursor:pointer}
+        .phone-preset.on{background:var(--c-orange);color:#000;border-color:var(--c-orange)}
+        .phone-preset-pct{color:var(--c-text-secondary);font-size:.4rem;font-weight:600;margin-left:2px}
+        .phone-kb{display:flex;gap:4px}
+        .phone-kb-col{flex:1;display:flex;flex-direction:column;gap:3px;background:var(--c-black);border:1px solid var(--c-outline);border-radius:6px;padding:3px}
+        .phone-kb-head{font-size:.38rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;text-align:center;padding:1px 0 2px}
+        .phone-kb-card{background:var(--c-graphite-light);border:1px solid var(--c-outline);border-radius:4px;padding:2px 4px;font-size:.36rem;color:var(--c-text);line-height:1.25;cursor:pointer}
+        .phone-kb-card b{color:var(--c-text);font-weight:700}
+        .phone-kb-card .wa{color:var(--c-orange)}
         .phone-total{background:#332200;border:1px solid rgba(255,152,0,.3);border-radius:7px;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-size:.52rem;font-weight:700;color:#FFE082}
         .phone-actions{display:flex;gap:5px}
         .phone-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:5px;border-radius:7px;font-size:.4rem;font-weight:600;border:1px solid var(--c-outline)}
@@ -187,6 +198,7 @@
             <li><a href="#maquinas" data-i18n="nav.maquinas">Máquinas</a></li>
             <li><a href="#materiales" data-i18n="nav.materiales">Materiales</a></li>
             <li><a href="#costos" data-i18n="nav.costos">Costos</a></li>
+            <li><a href="#crm" data-i18n="nav.crm">CRM</a></li>
         </ul>
         <div class="lang-toggle">
             <button onclick="setLang('es')" class="active">ES</button>
@@ -206,62 +218,79 @@
                 <div class="notch"></div>
                 <div class="phone-screen">
                     <div class="phone-header">
-                        <span class="title">MakerCalk <span style="font-size:.5rem;opacity:.6">v7.0</span></span>
+                        <span class="title">MakerCalk <span class="phone-version" title="Información de la app">0.8.x</span></span>
                         <span class="material-symbols-rounded" style="font-size:16px;color:var(--c-text-secondary)">history</span>
                     </div>
                     <div class="phone-tabs">
                         <div class="phone-tab active"><span class="material-symbols-rounded" style="font-size:16px">home</span><span data-i18n="phone.home">HOME</span></div>
-                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">person</span><span data-i18n="phone.cliente">Cliente</span></div>
-                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">print_add</span><span data-i18n="phone.maq">Maq.</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">folder</span><span data-i18n="phone.proyecto">Proy.</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">print_add</span><span data-i18n="phone.maq">Máq.</span></div>
                         <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">category</span><span data-i18n="phone.mat">Mat.</span></div>
                         <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">brush</span><span data-i18n="phone.post">Post.</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">payments</span><span data-i18n="phone.costos">Costos</span></div>
+                        <div class="phone-tab"><span class="material-symbols-rounded" style="font-size:16px">settings</span><span data-i18n="phone.config">Config</span></div>
                     </div>
                     <div class="phone-body">
                         <div class="phone-accordion" style="border-color:var(--c-orange)">
                             <div class="phone-acc-header" style="background:var(--c-orange);color:#000">
-                                <span class="material-symbols-rounded" style="font-size:14px;color:#000">description</span>
-                                <span data-i18n="phone.detalles">Detalles del Trabajo</span>
+                                <span class="material-symbols-rounded" style="font-size:14px;color:#000">payments</span>
+                                <span data-i18n="phone.resumen">Resumen y Acciones</span>
                                 <span class="material-symbols-rounded" style="font-size:16px;margin-left:auto;color:#000">expand_less</span>
                             </div>
                             <div class="phone-acc-body">
-                                <div class="field"><div class="lbl" data-i18n="phone.titulo-lbl">Título del Trabajo</div><div class="val" style="color:var(--c-text-secondary)" data-i18n="phone.titulo-val">Ej. Impresion 3D Prototipo</div></div>
-                                <div class="field"><div class="lbl" data-i18n="phone.tipo-lbl">Tipo de Trabajo</div><div class="val" style="color:var(--c-text-secondary)" data-i18n="phone.tipo-val">Impresion 3D</div></div>
-                                <div class="phone-row" style="gap:4px">
-                                    <div class="field" style="flex:1"><div class="lbl" data-i18n="phone.fecha-lbl">Fecha</div><div class="val" style="font-size:.48rem">15/05/2026</div></div>
-                                    <div class="field" style="flex:1"><div class="lbl" data-i18n="phone.estado-lbl">Estado</div><div class="val" style="font-size:.48rem" data-i18n="phone.estado-val">Pendiente</div></div>
+                                <div class="phone-costs">
+                                    <div class="phone-cost-row"><span data-i18n="phone.maq-en">Maquinas / Energia</span><span>$0.00</span></div>
+                                    <div class="phone-cost-row"><span data-i18n="phone.empresa">Empresa / Gastos</span><span>$0.00</span></div>
+                                    <div class="phone-cost-row"><span data-i18n="phone.materiales">Materiales</span><span>$0.00</span></div>
+                                    <div class="phone-cost-row"><span data-i18n="phone.labor">Mano de Obra</span><span>$0.00</span></div>
+                                    <div class="phone-cost-row"><span data-i18n="phone.post-proc">Post-Proceso</span><span>$0.00</span></div>
+                                    <div class="phone-cost-divider"></div>
+                                    <div class="phone-cost-row" style="color:var(--c-orange);font-weight:700"><span data-i18n="phone.costo-real">Costo Real</span><span>$0.00</span></div>
                                 </div>
-                                <div class="field"><div class="lbl" data-i18n="phone.cantidad-lbl">Cantidad de Unidades</div><div class="val">1</div></div>
+                                <div class="phone-margin">
+                                    <span data-i18n="phone.margen">Margen</span>
+                                    <div class="phone-presets">
+                                        <span class="phone-preset">15</span>
+                                        <span class="phone-preset">30</span>
+                                        <span class="phone-preset on">50</span>
+                                        <span class="phone-preset">75</span>
+                                        <span class="phone-preset-pct">%</span>
+                                    </div>
+                                </div>
+                                <div class="phone-cost-divider"></div>
+                                <div class="phone-cost-row"><span data-i18n="phone.iva">IVA / Impuestos</span><span>22%</span></div>
+                                <div class="phone-total">
+                                    <span data-i18n="phone.total">TOTAL</span>
+                                    <span>$0.00</span>
+                                </div>
+                                <div class="phone-actions">
+                                    <div class="phone-btn" style="background:var(--c-graphite-light);color:var(--c-text-secondary)"><span class="material-symbols-rounded" style="font-size:12px">pie_chart</span><span data-i18n="phone.grafico">Gráfico</span></div>
+                                    <div class="phone-btn" style="background:#757575;color:#fff"><span class="material-symbols-rounded" style="font-size:12px">print</span>PDF</div>
+                                </div>
+                                <div class="phone-save" data-i18n="phone.guardar">Guardar</div>
                             </div>
                         </div>
                         <div class="phone-accordion">
                             <div class="phone-acc-header">
-                                <span class="material-symbols-rounded" style="font-size:14px">payments</span>
-                                <span data-i18n="phone.resumen">Resumen y Acciones</span>
+                                <span class="material-symbols-rounded" style="font-size:14px">manage_search</span>
+                                <span data-i18n="phone.crm">CRM · Clientes</span>
                                 <span class="material-symbols-rounded" style="font-size:16px;margin-left:auto">expand_more</span>
                             </div>
                         </div>
-                        <div class="phone-costs">
-                            <div class="phone-cost-row"><span data-i18n="phone.maq-en">Maquinas / Energia</span><span>$0.00</span></div>
-                            <div class="phone-cost-row"><span data-i18n="phone.empresa">Empresa / Gastos</span><span>$0.00</span></div>
-                            <div class="phone-cost-row"><span data-i18n="phone.materiales">Materiales</span><span>$0.00</span></div>
-                            <div class="phone-cost-row"><span data-i18n="phone.labor">Mano de Obra</span><span>$0.00</span></div>
-                            <div class="phone-cost-row"><span data-i18n="phone.post-proc">Post-Proceso</span><span>$0.00</span></div>
-                            <div class="phone-cost-divider"></div>
-                            <div class="phone-cost-row" style="color:var(--c-orange);font-weight:700"><span data-i18n="phone.costo-real">Costo Real</span><span>$0.00</span></div>
+                        <div class="phone-kb">
+                            <div class="phone-kb-col">
+                                <div class="phone-kb-head" style="color:#9E9E9E">Nuevo</div>
+                                <div class="phone-kb-card"><b>Ana García</b><span class="wa">WhatsApp</span><div>3D Prototipo</div></div>
+                            </div>
+                            <div class="phone-kb-col">
+                                <div class="phone-kb-head" style="color:#FFB300">Contactado</div>
+                                <div class="phone-kb-card"><b>Taller Fer</b><span class="wa">Email</span></div>
+                            </div>
+                            <div class="phone-kb-col">
+                                <div class="phone-kb-head" style="color:#FF9800">Presupuestado</div>
+                                <div class="phone-kb-card"><b>María · Láser</b><div>$120</div></div>
+                            </div>
                         </div>
-                        <div class="phone-margin">
-                            <span data-i18n="phone.margen">Margen de Ganancia</span>
-                            <span class="phone-pill">20%</span>
-                        </div>
-                        <div class="phone-total">
-                            <span data-i18n="phone.total">TOTAL PRESUPUESTO</span>
-                            <span>$0.00</span>
-                        </div>
-                        <div class="phone-actions">
-                            <div class="phone-btn" style="background:var(--c-graphite-light);color:var(--c-text-secondary)"><span class="material-symbols-rounded" style="font-size:12px">pie_chart</span><span data-i18n="phone.grafico">Grafico</span></div>
-                            <div class="phone-btn" style="background:#757575;color:#fff"><span class="material-symbols-rounded" style="font-size:12px">print</span>PDF</div>
-                        </div>
-                        <div class="phone-save" data-i18n="phone.guardar">Guardar</div>
                         <div class="phone-home"><div class="bar"></div></div>
                     </div>
                 </div>
@@ -453,6 +482,57 @@
         </div>
     </section>
 
+    <section id="crm" class="alt-bg">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="crm.title">Gestión de clientes (CRM)</h2>
+            <p class="section-subtitle" data-i18n="crm.subtitle">Convertí prospectos en clientes con un pipeline visual, fichas de contacto y seguimiento automático.</p>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">manage_search</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="crm.tag-pipeline">Pipeline</span>
+                    <h3 data-i18n="crm.pipeline-title">Pipeline comercial en dos fases</h3>
+                    <p data-i18n="crm.pipeline-desc">Tablero visual tipo Kanban: Nuevo, Contactado, Presupuestado, Negociando, Ganado o Perdido, y luego En Producción, Terminado, Entregado y Pagado.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.pipeline-li1">Vista Pipeline o Fichas, con filtros por estado</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.pipeline-li2">Resumen: prospectos, en producción, ganados y seguimientos de hoy</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.pipeline-li3">Búsqueda por nombre o interés</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-detail">
+                <div class="icon-box"><span class="material-symbols-rounded">person_search</span></div>
+                <div class="text">
+                    <span class="feature-tag" data-i18n="crm.tag-ficha">Fichas</span>
+                    <h3 data-i18n="crm.ficha-title">Ficha de cada contacto</h3>
+                    <p data-i18n="crm.ficha-desc">Nombre, empresa, teléfono, email, fuente, interés, valor estimado y notas, con acciones rápidas.</p>
+                    <ul>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.ficha-li1">WhatsApp y Email con un toque</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.ficha-li2">Historial de seguimiento con responsable y fecha</span></li>
+                        <li><span class="material-symbols-rounded">check_circle</span> <span data-i18n="crm.ficha-li3">Presupuestos vinculados al cliente</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">event</span></div>
+                    <h3 data-i18n="crm.card-seguimiento-title">Seguimiento planificado</h3>
+                    <p data-i18n="crm.card-seguimiento-desc">Fecha de próximo contacto, frecuencia configurable y alertas de seguimiento pendiente.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">receipt_long</span></div>
+                    <h3 data-i18n="crm.card-presupuesto-title">Presupuestos asociados</h3>
+                    <p data-i18n="crm.card-presupuesto-desc">Cada trabajo queda vinculado al cliente y suma su valor total en la ficha.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><span class="material-symbols-rounded">chat</span></div>
+                    <h3 data-i18n="crm.card-wa-title">Acciones en un toque</h3>
+                    <p data-i18n="crm.card-wa-desc">Abrí WhatsApp o email del cliente, o creá un presupuesto directo desde su ficha.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section>
         <div class="section-inner">
             <h2 class="section-title centered" data-i18n="cloud.title">Respaldo en la nube (proximamente)</h2>
@@ -501,10 +581,13 @@
         "hero.title-post": { es: "necesita", en: "needs" },
         "hero.desc": { es: "Presupuestos profesionales para impresión 3D, corte láser, CNC y fabricación digital. Materiales, máquinas, mano de obra y márgenes en una sola herramienta.", en: "Professional estimates for 3D printing, laser cutting, CNC and digital fabrication. Materials, machines, labor and margins in a single tool." },
         "phone.home": { es: "HOME", en: "HOME" },
-        "phone.cliente": { es: "Cliente", en: "Client" },
-        "phone.maq": { es: "Maq.", en: "Mach." },
+        "phone.proyecto": { es: "Proy.", en: "Proj." },
+        "phone.maq": { es: "Máq.", en: "Mach." },
         "phone.mat": { es: "Mat.", en: "Mat." },
         "phone.post": { es: "Post.", en: "Post." },
+        "phone.costos": { es: "Costos", en: "Costs" },
+        "phone.config": { es: "Config", en: "Settings" },
+        "phone.crm": { es: "CRM · Clientes", en: "CRM · Customers" },
         "phone.detalles": { es: "Detalles del Trabajo", en: "Job Details" },
         "phone.titulo-lbl": { es: "Título del Trabajo", en: "Job Title" },
         "phone.titulo-val": { es: "Ej. Impresion 3D Prototipo", en: "e.g. 3D Print Prototype" },
@@ -521,9 +604,10 @@
         "phone.labor": { es: "Mano de Obra", en: "Labor" },
         "phone.post-proc": { es: "Post-Proceso", en: "Post-Process" },
         "phone.costo-real": { es: "Costo Real", en: "Actual Cost" },
-        "phone.margen": { es: "Margen de Ganancia", en: "Profit Margin" },
-        "phone.total": { es: "TOTAL PRESUPUESTO", en: "TOTAL BUDGET" },
-        "phone.grafico": { es: "Grafico", en: "Chart" },
+        "phone.margen": { es: "Margen", en: "Margin" },
+        "phone.iva": { es: "IVA / Impuestos", en: "VAT / Taxes" },
+        "phone.total": { es: "TOTAL", en: "TOTAL" },
+        "phone.grafico": { es: "Gráfico", en: "Chart" },
         "phone.guardar": { es: "Guardar", en: "Save" },
         "stats.monedas": { es: "Monedas", en: "Currencies" },
         "stats.tecnologias": { es: "Tecnologías", en: "Technologies" },
@@ -595,6 +679,27 @@
         "cost.tag-margen": { es: "Margen", en: "Margin" },
         "cost.ganancia-title": { es: "Ganancia e impuestos", en: "Profit & taxes" },
         "cost.ganancia-desc": { es: "Margen porcentual global + cálculo de impuestos incluido. Precio final automático.", en: "Global profit margin + tax calculation included. Automatic final price." },
+        "nav.crm": { es: "CRM", en: "CRM" },
+        "crm.title": { es: "Gestión de clientes (CRM)", en: "Customer management (CRM)" },
+        "crm.subtitle": { es: "Convertí prospectos en clientes con un pipeline visual, fichas de contacto y seguimiento automático.", en: "Turn prospects into customers with a visual pipeline, contact cards and automatic follow-up." },
+        "crm.tag-pipeline": { es: "Pipeline", en: "Pipeline" },
+        "crm.pipeline-title": { es: "Pipeline comercial en dos fases", en: "Two-phase sales pipeline" },
+        "crm.pipeline-desc": { es: "Tablero visual tipo Kanban: Nuevo, Contactado, Presupuestado, Negociando, Ganado o Perdido, y luego En Producción, Terminado, Entregado y Pagado.", en: "Visual Kanban board: New, Contacted, Quoted, Negotiating, Won or Lost, then In Production, Finished, Delivered and Paid." },
+        "crm.pipeline-li1": { es: "Vista Pipeline o Fichas, con filtros por estado", en: "Pipeline or Card view, with status filters" },
+        "crm.pipeline-li2": { es: "Resumen: prospectos, en producción, ganados y seguimientos de hoy", en: "Summary: prospects, in production, won and today's follow-ups" },
+        "crm.pipeline-li3": { es: "Búsqueda por nombre o interés", en: "Search by name or interest" },
+        "crm.tag-ficha": { es: "Fichas", en: "Cards" },
+        "crm.ficha-title": { es: "Ficha de cada contacto", en: "Per-contact card" },
+        "crm.ficha-desc": { es: "Nombre, empresa, teléfono, email, fuente, interés, valor estimado y notas, con acciones rápidas.", en: "Name, company, phone, email, source, interest, estimated value and notes, with quick actions." },
+        "crm.ficha-li1": { es: "WhatsApp y Email con un toque", en: "One-tap WhatsApp and email" },
+        "crm.ficha-li2": { es: "Historial de seguimiento con responsable y fecha", en: "Follow-up history with owner and date" },
+        "crm.ficha-li3": { es: "Presupuestos vinculados al cliente", en: "Quotes linked to the customer" },
+        "crm.card-seguimiento-title": { es: "Seguimiento planificado", en: "Planned follow-up" },
+        "crm.card-seguimiento-desc": { es: "Fecha de próximo contacto, frecuencia configurable y alertas de seguimiento pendiente.", en: "Next contact date, configurable frequency and pending follow-up alerts." },
+        "crm.card-presupuesto-title": { es: "Presupuestos asociados", en: "Linked quotes" },
+        "crm.card-presupuesto-desc": { es: "Cada trabajo queda vinculado al cliente y suma su valor total en la ficha.", en: "Each job is linked to the customer and adds its total value to the card." },
+        "crm.card-wa-title": { es: "Acciones en un toque", en: "One-tap actions" },
+        "crm.card-wa-desc": { es: "Abrí WhatsApp o email del cliente, o creá un presupuesto directo desde su ficha.", en: "Open customer WhatsApp or email, or create a quote right from their card." },
         "cloud.title": { es: "Respaldo en la nube (proximamente)", en: "Cloud backup (coming soon)" },
         "cloud.subtitle": { es: "Tus datos sincronizados con Supabase y Google Drive.", en: "Your data synced with Supabase and Google Drive." },
         "cloud.supabase-title": { es: "Supabase", en: "Supabase" },
